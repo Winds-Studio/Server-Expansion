@@ -30,7 +30,6 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,7 +40,6 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 import java.util.concurrent.Callable;
@@ -140,6 +138,33 @@ public class ServerExpansion extends PlaceholderExpansion implements Cacheable, 
 				.stream()
 				.mapToInt(world -> world.getEntities().size())
 				.sum();
+	}
+
+	// Per world counts
+
+	private int getLocalChunks(String world){
+		return Bukkit.getWorld(world).getLoadedChunks().length;
+	}
+
+	private int getLocalPlayers(String world){
+		return Bukkit.getWorld(world).getPlayers().size();
+	}
+
+	private int getLocalEntities(String world){
+		return Bukkit.getWorld(world).getEntities().size();
+	}
+
+	private int getLocalLivingEntities(String world){
+		return Bukkit.getWorld(world).getLivingEntities().size();
+	}
+
+	// Paper method
+	private int getLocalTileEntities(String world){
+		return Bukkit.getWorld(world).getTileEntityCount();
+	}
+
+	private int getLocalTickableTileEntities(String world){
+		return Bukkit.getWorld(world).getTickableTileEntityCount();
 	}
 
 	@Override
@@ -303,6 +328,38 @@ public class ServerExpansion extends PlaceholderExpansion implements Cacheable, 
 			} catch (NullPointerException | IllegalArgumentException ex) {
 				return null;
 			}
+		}
+
+		// Per world counts placeholders
+
+		if (identifier.startsWith("total_chunks_")) {
+			identifier = identifier.replace("total_chunks_", "");
+			return String.valueOf(getLocalChunks(identifier));
+		}
+
+		if (identifier.startsWith("total_players_")) {
+			identifier = identifier.replace("total_players_", "");
+			return String.valueOf(getLocalPlayers(identifier));
+		}
+
+		if (identifier.startsWith("total_entities_")) {
+			identifier = identifier.replace("total_entities_", "");
+			return String.valueOf(getLocalEntities(identifier));
+		}
+
+		if (identifier.startsWith("total_living_entities_")) {
+			identifier = identifier.replace("total_living_entities_", "");
+			return String.valueOf(getLocalLivingEntities(identifier));
+		}
+
+		if (identifier.startsWith("total_tile_entities_")) {
+			identifier = identifier.replace("total_tile_entities_", "");
+			return String.valueOf(getLocalTileEntities(identifier));
+		}
+
+		if (identifier.startsWith("total_tick_tile_entities_")) {
+			identifier = identifier.replace("total_tick_tile_entities_", "");
+			return String.valueOf(getLocalTickableTileEntities(identifier));
 		}
 
 		return null;
