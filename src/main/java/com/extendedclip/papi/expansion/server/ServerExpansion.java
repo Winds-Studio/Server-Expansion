@@ -50,6 +50,7 @@ import java.util.logging.Level;
 public class ServerExpansion extends PlaceholderExpansion implements Cacheable, Configurable {
 	
 	private ServerUtils serverUtils = null;
+	private FoliaUtils foliaUtils = null;
 	
 	private final Map<String, SimpleDateFormat> dateFormats = new HashMap<>();
 	private final Runtime runtime = Runtime.getRuntime();
@@ -65,8 +66,6 @@ public class ServerExpansion extends PlaceholderExpansion implements Cacheable, 
 			.expireAfterWrite(1, TimeUnit.MINUTES)
 			.build();
 
-	private final String VERSION = getClass().getPackage().getImplementationVersion();
-
 	@Override
 	public boolean canRegister() {
 		serverName = this.getString("server_name", "A Minecraft Server");
@@ -80,6 +79,7 @@ public class ServerExpansion extends PlaceholderExpansion implements Cacheable, 
 	public void clear() {
 		dateFormats.clear();
 		serverUtils = null;
+		foliaUtils = null;
 		cache.invalidateAll();
 	}
 
@@ -95,7 +95,7 @@ public class ServerExpansion extends PlaceholderExpansion implements Cacheable, 
 
 	@Override
 	public @NotNull String getVersion() {
-		return VERSION;
+		return "2.6.2";
 	}
 
 	@Override
@@ -173,6 +173,9 @@ public class ServerExpansion extends PlaceholderExpansion implements Cacheable, 
 		if (serverUtils == null) {
 			serverUtils = new ServerUtils();
 		}
+		if (foliaUtils == null) {
+			foliaUtils = new FoliaUtils();
+		}
 
 		switch (identifier) {
 			// Players placeholders
@@ -215,6 +218,10 @@ public class ServerExpansion extends PlaceholderExpansion implements Cacheable, 
 			// Other placeholders
 			case "tps":
 				return getTps(null);
+			case "folia_tps":
+				return getFoliaTPS(null, p.getPlayer());
+			case "folia_mspt":
+				return getFoliaMSPT(null, p.getPlayer());
 			case "uptime":
 				long seconds = TimeUnit.MILLISECONDS.toSeconds(ManagementFactory.getRuntimeMXBean().getUptime());
 				return formatTime(Duration.of(seconds, ChronoUnit.SECONDS));
@@ -231,6 +238,16 @@ public class ServerExpansion extends PlaceholderExpansion implements Cacheable, 
 		if (identifier.startsWith("tps_")) {
 			identifier = identifier.replace("tps_", "");
 			return getTps(identifier);
+		}
+
+		if (identifier.startsWith("folia_tps_")) {
+			identifier = identifier.replace("folia_tps_", "");
+			return getFoliaTPS(identifier, p.getPlayer());
+		}
+
+		if (identifier.startsWith("folia_mspt_")) {
+			identifier = identifier.replace("folia_mspt_", "");
+			return getFoliaMSPT(identifier, p.getPlayer());
 		}
 
 		if (identifier.startsWith("online_")) {
@@ -366,6 +383,8 @@ public class ServerExpansion extends PlaceholderExpansion implements Cacheable, 
 	}
 
 	public String getTps(String arg) {
+		if (serverUtils.getServerVariant().equals("Folia")) return null;
+
 		if (arg == null || arg.isEmpty()) {
 			StringJoiner joiner = new StringJoiner(ChatColor.GRAY + ", ");
 			for (double tps : serverUtils.getTps()) {
@@ -419,6 +438,72 @@ public class ServerExpansion extends PlaceholderExpansion implements Cacheable, 
 			case "15_percent_colored":
 			case "fifteen_percent_colored":
 				return getColoredTpsPercent(serverUtils.getTps()[2]);
+		}
+		return null;
+	}
+
+	public String getFoliaTPS(String arg, Player p) {
+		if (arg == null || arg.isEmpty()) {
+			StringJoiner joiner = new StringJoiner(ChatColor.GRAY + ", ");
+			for (double tps : foliaUtils.getGlobalTPS()) {
+				joiner.add(getColoredTps(tps));
+			}
+			return joiner.toString();
+		}
+		switch (arg) {
+			case "5s":
+				return fix(foliaUtils.getTPS(p.getLocation()).get(0));
+			case "15s":
+				return fix(foliaUtils.getTPS(p.getLocation()).get(1));
+			case "1m":
+				return fix(foliaUtils.getTPS(p.getLocation()).get(2));
+			case "5m":
+				return fix(foliaUtils.getTPS(p.getLocation()).get(3));
+			case "15m":
+				return fix(foliaUtils.getTPS(p.getLocation()).get(4));
+			case "5s_colored":
+				return getColoredTps(foliaUtils.getTPS(p.getLocation()).get(0));
+			case "15s_colored":
+				return getColoredTps(foliaUtils.getTPS(p.getLocation()).get(1));
+			case "1m_colored":
+				return getColoredTps(foliaUtils.getTPS(p.getLocation()).get(2));
+			case "5m_colored":
+				return getColoredTps(foliaUtils.getTPS(p.getLocation()).get(3));
+			case "15m_colored":
+				return getColoredTps(foliaUtils.getTPS(p.getLocation()).get(4));
+		}
+		return null;
+	}
+
+	public String getFoliaMSPT(String arg, Player p) {
+		if (arg == null || arg.isEmpty()) {
+			StringJoiner joiner = new StringJoiner(ChatColor.GRAY + ", ");
+			for (double tps : foliaUtils.getGlobalMSPT()) {
+				joiner.add(getColoredTps(tps));
+			}
+			return joiner.toString();
+		}
+		switch (arg) {
+			case "5s":
+				return fix(foliaUtils.getMSPT(p.getLocation()).get(0));
+			case "15s":
+				return fix(foliaUtils.getMSPT(p.getLocation()).get(1));
+			case "1m":
+				return fix(foliaUtils.getMSPT(p.getLocation()).get(2));
+			case "5m":
+				return fix(foliaUtils.getMSPT(p.getLocation()).get(3));
+			case "15m":
+				return fix(foliaUtils.getMSPT(p.getLocation()).get(4));
+			case "5s_colored":
+				return getColoredTps(foliaUtils.getMSPT(p.getLocation()).get(0));
+			case "15s_colored":
+				return getColoredTps(foliaUtils.getMSPT(p.getLocation()).get(1));
+			case "1m_colored":
+				return getColoredTps(foliaUtils.getMSPT(p.getLocation()).get(2));
+			case "5m_colored":
+				return getColoredTps(foliaUtils.getMSPT(p.getLocation()).get(3));
+			case "15m_colored":
+				return getColoredTps(foliaUtils.getMSPT(p.getLocation()).get(4));
 		}
 		return null;
 	}
@@ -480,8 +565,8 @@ public class ServerExpansion extends PlaceholderExpansion implements Cacheable, 
 	}
 	
 	private String fix(double tps) {
-		double finalTps = Math.min(Math.round(tps), 20.0);
-		
+		String finalTps = String.format("%.2f", tps);
+
 		return (tps > 20.0 ? "*" : "") + finalTps;
 	}
 	

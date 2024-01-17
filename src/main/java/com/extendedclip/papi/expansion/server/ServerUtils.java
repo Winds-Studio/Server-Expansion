@@ -30,6 +30,7 @@ public final class ServerUtils {
         variants.put("com.tuinity.tuinity.config.TuinityConfig", "Tuinity");
         variants.put("gg.airplane.AirplaneConfig", "Airplane");
         variants.put("net.pl3x.purpur.PurpurConfig", "Purpur");
+        variants.put("io.papermc.paper.threadedregions.RegionizedServer", "Folia");
         
         resolveTPSHandler();
     }
