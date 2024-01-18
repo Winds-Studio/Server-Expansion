@@ -1,6 +1,5 @@
 plugins {
     `java-library`
-    id("io.papermc.paperweight.userdev") version "1.5.11"
 }
 
 group = "com.extendedclip.papi.expansion.server"
@@ -22,12 +21,10 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+    compileOnly("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.11.5") {
         exclude(group = "org.bstats")
     }
-
-    paperweight.foliaDevBundle("1.19.4-R0.1-SNAPSHOT")
 }
 
 tasks.withType<JavaCompile> {
@@ -35,6 +32,6 @@ tasks.withType<JavaCompile> {
 }
 
 configure<JavaPluginExtension> {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }

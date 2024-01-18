@@ -4,7 +4,7 @@ import me.clip.placeholderapi.PlaceholderAPIPlugin;
 import org.bukkit.Bukkit;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -16,7 +16,7 @@ public final class ServerUtils {
     private String build = null;
     private String variant = null;
     
-    private final Map<String, String> variants = new HashMap<>();
+    private final Map<String, String> variants = new LinkedHashMap<>();
     
     private Object craftServer = null;
     private Field tps = null;
@@ -24,13 +24,13 @@ public final class ServerUtils {
     private boolean hasTpsMethod = false;
     
     public ServerUtils() {
-        variants.put("org.spigotmc.SpigotConfig", "Spigot");
+        variants.put("io.papermc.paper.threadedregions.RegionizedServer", "Folia");
+        variants.put("net.pl3x.purpur.PurpurConfig", "Purpur");
+        variants.put("gg.airplane.AirplaneConfig", "Airplane");
+        variants.put("com.tuinity.tuinity.config.TuinityConfig", "Tuinity");
         variants.put("io.papermc.paper.configuration.ConfigurationLoaders", "Paper"); // New config location for Paper 1.19+
         variants.put("com.destroystokyo.paper.PaperConfig", "Paper"); // Still supported by Paper, but deprecated.
-        variants.put("com.tuinity.tuinity.config.TuinityConfig", "Tuinity");
-        variants.put("gg.airplane.AirplaneConfig", "Airplane");
-        variants.put("net.pl3x.purpur.PurpurConfig", "Purpur");
-        variants.put("io.papermc.paper.threadedregions.RegionizedServer", "Folia");
+        variants.put("org.spigotmc.SpigotConfig", "Spigot");
         
         resolveTPSHandler();
     }
