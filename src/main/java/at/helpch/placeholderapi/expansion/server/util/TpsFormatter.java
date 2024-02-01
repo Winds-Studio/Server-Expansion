@@ -31,7 +31,7 @@ public class TpsFormatter {
      * @return tps rounded
      */
     private @NotNull String round(final double tps) {
-        final double finalTps = Math.min(Math.round(tps), 20.0);
+        final String finalTps = String.format("%.2f", tps);
         return (tps > 20.0 ? "*" : "") + finalTps;
     }
 
@@ -69,6 +69,8 @@ public class TpsFormatter {
     }
 
     public @Nullable String getTps(@Nullable final String type) {
+        if (ServerUtil.getVariant().equals("Folia")) return null;
+
         if (type == null || type.isEmpty()) {
             return getAllTps(this::getColoredTps);
         }

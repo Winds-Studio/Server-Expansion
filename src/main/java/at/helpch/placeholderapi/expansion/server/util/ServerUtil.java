@@ -20,11 +20,13 @@ public final class ServerUtil {
     private static boolean hasTpsMethod; // Paper and its forks have Bukkit#getTps
 
     static {
+        variants.put("io.papermc.paper.threadedregions.RegionizedServer", "Folia");
         variants.put("net.pl3x.purpur.PurpurConfig", "Purpur");
         variants.put("gg.airplane.AirplaneConfig", "Airplane");
         variants.put("com.tuinity.tuinity.config.TuinityConfig", "Tuinity");
         variants.put("io.papermc.paper.configuration.ConfigurationLoaders", "Paper"); // New config location for Paper 1.19+
         variants.put("com.destroystokyo.paper.PaperConfig", "Paper"); // Still supported by Paper, but deprecated.
+        variants.put("org.spigotmc.SpigotConfig", "Spigot");
 
         craftServer = getCraftServer();
         tpsField = getTpsHandler();

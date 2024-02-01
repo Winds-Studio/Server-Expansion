@@ -162,6 +162,32 @@ public final class ServerExpansion extends PlaceholderExpansion implements Cache
             .orElse(-1);
     }
 
+    // Per world counts
+    private int getLocalChunks(String world){
+        return Bukkit.getWorld(world).getLoadedChunks().length;
+    }
+
+    private int getLocalPlayers(String world){
+        return Bukkit.getWorld(world).getPlayers().size();
+    }
+
+    private int getLocalEntities(String world){
+        return Bukkit.getWorld(world).getEntities().size();
+    }
+
+    private int getLocalLivingEntities(String world){
+        return Bukkit.getWorld(world).getLivingEntities().size();
+    }
+
+    // Paper method
+    private int getLocalTileEntities(String world){
+        return Bukkit.getWorld(world).getTileEntityCount();
+    }
+
+    private int getLocalTickableTileEntities(String world){
+        return Bukkit.getWorld(world).getTickableTileEntityCount();
+    }
+
     @SuppressWarnings("SpellCheckingInspection")
     @Override
     public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
@@ -247,6 +273,37 @@ public final class ServerExpansion extends PlaceholderExpansion implements Cache
         // countup_<date> or countup_<custom format>_<date>
         if (params.startsWith("countup_")) {
             return timeFormatter.calculateTimeBetween(player, params.substring("countup_".length()), false, true);
+        }
+
+        // Per world counts placeholders
+        if (params.startsWith("total_chunks_")) {
+            params = params.replace("total_chunks_", "");
+            return String.valueOf(getLocalChunks(params));
+        }
+
+        if (params.startsWith("total_players_")) {
+            params = params.replace("total_players_", "");
+            return String.valueOf(getLocalPlayers(params));
+        }
+
+        if (params.startsWith("total_entities_")) {
+            params = params.replace("total_entities_", "");
+            return String.valueOf(getLocalEntities(params));
+        }
+
+        if (params.startsWith("total_living_entities_")) {
+            params = params.replace("total_living_entities_", "");
+            return String.valueOf(getLocalLivingEntities(params));
+        }
+
+        if (params.startsWith("total_tile_entities_")) {
+            params = params.replace("total_tile_entities_", "");
+            return String.valueOf(getLocalTileEntities(params));
+        }
+
+        if (params.startsWith("total_tick_tile_entities_")) {
+            params = params.replace("total_tick_tile_entities_", "");
+            return String.valueOf(getLocalTickableTileEntities(params));
         }
 
         return null;
