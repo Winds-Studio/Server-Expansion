@@ -1,6 +1,6 @@
 plugins {
-    java
-    id("com.github.johnrengelman.shadow") version ("7.0.0")
+    `java-library`
+    id("io.github.goooler.shadow") version "8.1.7"
 }
 
 group = "at.helpch.placeholderapi.expansion"
