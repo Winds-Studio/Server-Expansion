@@ -11,7 +11,6 @@ public final class ServerUtil {
 
     private static final Map<String, String> variants = new TreeMap<>();
     private static final String variant;
-    private static final String serverVersion;
     private static final String build;
 
     // TPS stuff
@@ -31,7 +30,6 @@ public final class ServerUtil {
         craftServer = getCraftServer();
         tpsField = getTpsHandler();
         variant = findVariant();
-        serverVersion = Bukkit.getBukkitVersion().split("-")[0]; // The version is formatted as 1.20.1-R0.1-SNAPSHOT
         build = findBuild();
     }
 
@@ -67,7 +65,7 @@ public final class ServerUtil {
             if (VersionHelper.IS_1_17_OR_HIGHER) {
                 clas = Class.forName("net.minecraft.server.MinecraftServer");
             } else {
-                clas = Class.forName(String.format("net.minecraft.server.%s.MinecraftServer", VersionHelper.NMS_VERSION));
+                clas = Class.forName(String.format("net.minecraft.server.%s.MinecraftServer", VersionHelper.getNmsVersion()));
             }
 
             return clas.getMethod("getServer").invoke(null);
@@ -126,7 +124,7 @@ public final class ServerUtil {
             }
         }
 
-        return "Unknonw";
+        return "Unknown";
     }
 
     public static String getVariant() {
@@ -134,7 +132,7 @@ public final class ServerUtil {
     }
 
     public static String getServerVersion() {
-        return serverVersion;
+        return VersionHelper.MINECRAFT_VERSION;
     }
 
     public static String getBuild() {
