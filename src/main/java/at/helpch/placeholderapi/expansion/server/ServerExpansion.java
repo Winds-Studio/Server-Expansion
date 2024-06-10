@@ -63,7 +63,7 @@ public final class ServerExpansion extends PlaceholderExpansion implements Cache
 
     @Override
     public @NotNull String getVersion() {
-        return "2.7.1";
+        return "2.7.2";
     }
 
     @Override
@@ -212,7 +212,7 @@ public final class ServerExpansion extends PlaceholderExpansion implements Cache
                 return ServerUtil.getBuild();
             case "version_build":
             case "version_full":
-                return Bukkit.getBukkitVersion();
+                return ServerUtil.getServerVersion() + '-' + ServerUtil.getBuild();
             // -----
 
             // ----- RAM placeholders
