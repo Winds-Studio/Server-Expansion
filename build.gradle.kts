@@ -12,8 +12,8 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.17.1-R0.1-SNAPSHOT")
-    compileOnly("me.clip:placeholderapi:2.11.5")
+    compileOnly("io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT")
+    compileOnly("me.clip:placeholderapi:2.11.3")
 }
 
 tasks {
