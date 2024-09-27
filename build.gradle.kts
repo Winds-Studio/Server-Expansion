@@ -4,9 +4,10 @@ plugins {
 }
 
 group = "at.helpch.placeholderapi.expansion"
-version = "2.7.2"
+version = "2.7.3"
 
 repositories {
+    mavenCentral()
     maven("https://papermc.io/repo/repository/maven-public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
 }
@@ -17,6 +18,19 @@ dependencies {
 }
 
 tasks {
+    jar {
+        manifest {
+            attributes["Implementation-Title"] = "server"
+            attributes["Implementation-Version"] = project.version
+        }
+    }
+
+    java {
+        disableAutoTargetJvm()
+        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+    }
+
     shadowJar {
         archiveFileName.set("PAPI-Expansion-Server-${project.version}.jar")
     }

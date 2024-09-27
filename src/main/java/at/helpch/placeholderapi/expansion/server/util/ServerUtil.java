@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.OptionalInt;
 import java.util.TreeMap;
@@ -12,13 +13,15 @@ import java.util.TreeMap;
 public final class ServerUtil {
 
     private static final Map<String, String> variants = new TreeMap<>();
-    private static final String variant;
-    private static final String build;
 
     // TPS stuff
     private static final Object craftServer;
     private static final Field tpsField;
     private static boolean hasTpsMethod; // Paper and its forks have Bukkit#getTps
+    // ----
+
+    private static final String variant;
+    private static final String build;
 
     static {
         variants.put("io.papermc.paper.threadedregions.RegionizedServer", "Folia");
@@ -179,8 +182,9 @@ public final class ServerUtil {
 
     private static String getBuild0() {
         OptionalInt buildNumber = ServerBuildInfo.buildInfo().buildNumber();
-        if (buildNumber.isEmpty())
+        if (!buildNumber.isPresent()) {
             return "Unknown";
+        }
 
         return String.valueOf(buildNumber.getAsInt());
     }
