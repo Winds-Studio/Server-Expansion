@@ -1,8 +1,8 @@
 name: Build Server-Expansion
+
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
 
 jobs:
   build:
@@ -23,7 +23,7 @@ jobs:
         run: ./gradlew clean build
 
       - name: Upload Server-Expansion Nightly
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
-          name: Server-Expansion-Nightly
-          path: build/libs/*.jar
+          path: build/libs/Server-Expansion-*.jar
+          archive: false
